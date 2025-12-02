@@ -1,0 +1,1033 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Parquetry.proto"
+
+WorldInfo {
+  CFM 0.0001
+  ERP 0.6
+  basicTimeStep 8
+  contactProperties [
+    ContactProperties {
+      softERP 0.6
+      softCFM 0.0001
+    }
+  ]
+}
+Viewpoint {
+  fieldOfView 1.5707963267948966
+  orientation 0.6286566745417119 0.6268025650357216 -0.46033610549119 2.2810021463666197
+  position -0.03233784762179466 0.35579545729444306 2.344187441914498
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 0 0 -0.24
+  floorSize 50 50
+  floorTileSize 2 2
+  floorAppearance Parquetry {
+    type "light strip"
+    IBLStrength 50
+  }
+}
+DEF IRSL-XR06-01 Robot {
+  translation -1.71044e-14 0.21 -0.07
+  rotation 0 0.7071069217790398 0.7071066405940274 3.14159
+  children [
+    GPS {
+      translation 0 0.023 0
+      rotation 0 1 0 3.141592653589793
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+          }
+          geometry Box {
+            size 0.05 0.01 0.05
+          }
+        }
+      ]
+      name "gps1"
+    }
+    Compass {
+      translation 0 -0.023 0
+      rotation -1 0 0 1.5707963267948966
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+          }
+          geometry Cylinder {
+            height 0.01
+            radius 0.02
+          }
+        }
+      ]
+      name "compass1"
+    }
+    DEF IU InertialUnit {
+      translation 0 0.03 0
+      rotation -1 0 0 1.5707963267948966
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+          }
+          geometry Cylinder {
+            height 0.01
+            radius 0.02
+          }
+        }
+      ]
+      name "IU"
+    }
+    DistanceSensor {
+      translation 0.035 -0.02 0
+      rotation 0 0 -1 1.5707963267948966
+      children [
+        Solid {
+          rotation -0.5773502691896258 0.5773502691896258 -0.5773502691896258 2.0943951023931953
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 1
+              }
+              geometry Cylinder {
+                height 0.005
+                radius 0.01
+              }
+            }
+          ]
+        }
+      ]
+      name "DS1"
+    }
+    DistanceSensor {
+      translation -0.035 -0.02 0
+      rotation 0 0 -1 1.5707963267948966
+      children [
+        Solid {
+          rotation -0.5773502691896258 0.5773502691896258 -0.5773502691896258 2.0943951023931953
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 1
+              }
+              geometry Cylinder {
+                height 0.005
+                radius 0.01
+              }
+            }
+          ]
+        }
+      ]
+      name "DS2"
+    }
+    DEF body1 Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.152 0.036 0.1385
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position -6.436186569313836e-07
+        axis 0 1 0
+        anchor 0.065 0 0.05826
+      }
+      device [
+        PositionSensor {
+          name "PS1"
+        }
+        RotationalMotor {
+          name "motor1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.07525499997425364 0 0.05830000660030938
+        rotation 0 -1 0 6.433437211788593e-07
+        children [
+          Group {
+            children [
+              DEF f1-1-1 Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.03951 0.02493 0.03
+                }
+              }
+              Solid {
+                translation 0.03765 -0.009 0
+                rotation 0 0 -1 0.7853981633974483
+                children [
+                  DEF f1-1-2 Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.06 0.03026 0.024
+                    }
+                  }
+                ]
+                name "1-1-2"
+                boundingObject USE f1-1-2
+                physics Physics {
+                }
+              }
+            ]
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position 7.91357850684064e-07
+              axis 0 0 1
+              anchor 0.05863 -0.03 0
+            }
+            device [
+              PositionSensor {
+                name "PS2"
+              }
+              RotationalMotor {
+                name "motor2"
+              }
+            ]
+            endPoint Solid {
+              translation 0.08363001978393897 -0.05499998021604622 0
+              rotation 0 0 -0.9999999999999999 0.7853972086421593
+              children [
+                DEF f1-2 Shape {
+                  appearance PBRAppearance {
+                  }
+                  geometry Box {
+                    size 0.086 0.02403 0.036
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    position 4.356999862803134e-07
+                    axis 0 0 1
+                    anchor 0.03681 0 0
+                  }
+                  device [
+                    PositionSensor {
+                      name "PS3"
+                    }
+                    RotationalMotor {
+                      name "motor3"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation 0.0419999999999995 2.2612828768264193e-09 0
+                    rotation 0 0 1 4.3597039098524516e-07
+                    children [
+                      DEF f1-3 Shape {
+                        appearance PBRAppearance {
+                        }
+                        geometry Box {
+                          size 0.03375 0.03096 0.024
+                        }
+                      }
+                      DEF TS1 TouchSensor {
+                        translation 0.046775028816566935 9.932448499144764e-06 -4.160467415026403e-09
+                        rotation -0.7071067812250069 -6.531196482647553e-08 -0.7071067811480853 3.1415925228326342
+                        children [
+                          Pose {
+                            translation -2.31296e-18 -0.01 -8.713e-20
+                            rotation 7.19235e-09 7.19235e-09 -1 -1.5707953071795862
+                            children [
+                              Shape {
+                                appearance PBRAppearance {
+                                }
+                                geometry Cone {
+                                  bottomRadius 0.02
+                                  height 0.05982
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                        name "TS1"
+                        boundingObject Pose {
+                          rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0943951023931953
+                          children [
+                            Box {
+                              size 0.02 0.0598 0.02
+                            }
+                          ]
+                        }
+                        physics Physics {
+                          density -1
+                          mass 0.1
+                        }
+                      }
+                    ]
+                    boundingObject USE f1-3
+                    physics Physics {
+                    }
+                  }
+                }
+              ]
+              name "solid(1)"
+              boundingObject USE f1-2
+              physics Physics {
+              }
+            }
+          }
+        ]
+        name "f1"
+        boundingObject USE f1-1-1
+        physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 6.438841033198804e-07
+        axis 0 1 0
+        anchor 0.065 0 -0.05826
+      }
+      device [
+        PositionSensor {
+          name "PS4"
+        }
+        RotationalMotor {
+          name "motor4"
+        }
+      ]
+      endPoint Solid {
+        translation 0.07525499997424258 0 -0.05830000660303142
+        rotation 0 1 0 6.440336342148305e-07
+        children [
+          Group {
+            children [
+              DEF f2-1-1 Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.03951 0.02493 0.03
+                }
+              }
+              Solid {
+                translation 0.03765 -0.009 0
+                rotation 0 0 -1 0.7853981633974483
+                children [
+                  DEF f2-1-2 Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.06 0.03026 0.024
+                    }
+                  }
+                ]
+                name "2-1-2"
+                boundingObject USE f2-1-2
+                physics Physics {
+                }
+              }
+            ]
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position 7.913369850020239e-07
+              axis 0 0 1
+              anchor 0.05863 -0.03 0
+            }
+            device [
+              PositionSensor {
+                name "PS5"
+              }
+              RotationalMotor {
+                name "motor5"
+              }
+            ]
+            endPoint Solid {
+              translation 0.08363001978341697 -0.054999980216567323 0
+              rotation 0 0 -1 0.7853972086630141
+              children [
+                DEF f2-2 Shape {
+                  appearance PBRAppearance {
+                  }
+                  geometry Box {
+                    size 0.086 0.02403 0.036
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    position 4.3568588986232694e-07
+                    axis 0 0 1
+                    anchor 0.03681 0 0
+                  }
+                  device [
+                    PositionSensor {
+                      name "PS6"
+                    }
+                    RotationalMotor {
+                      name "motor6"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation 0.0419999999999995 2.2612096183606147e-09 0
+                    rotation 0 0 0.9999999999999999 4.3597039098524516e-07
+                    children [
+                      DEF f2-3 Shape {
+                        appearance PBRAppearance {
+                        }
+                        geometry Box {
+                          size 0.03375 0.03096 0.024
+                        }
+                      }
+                      DEF TS2 TouchSensor {
+                        translation 0.04677502862279659 9.932263120654428e-06 5.720537654685387e-10
+                        rotation -0.7071067811927996 -6.531745595299624e-08 -0.7071067811802925 3.1415925228326342
+                        children [
+                          Pose {
+                            rotation 7.19235e-09 7.19235e-09 -1 -1.5707953071795862
+                            children [
+                              Shape {
+                                appearance PBRAppearance {
+                                }
+                                geometry Cone {
+                                  bottomRadius 0.02
+                                  height 0.05982
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                        name "TS2"
+                        boundingObject Pose {
+                          rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0943951023931953
+                          children [
+                            Box {
+                              size 0.02 0.0598 0.02
+                            }
+                          ]
+                        }
+                        physics Physics {
+                          density -1
+                          mass 0.1
+                        }
+                      }
+                    ]
+                    boundingObject USE f2-3
+                    physics Physics {
+                    }
+                  }
+                }
+              ]
+              name "solid(1)"
+              boundingObject USE f2-2
+              physics Physics {
+              }
+            }
+          }
+        ]
+        name "f2"
+        boundingObject USE f2-1-1
+        physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position -6.436766756348023e-07
+        axis 0 1 0
+        anchor -0.065 0 -0.05826
+      }
+      device [
+        PositionSensor {
+          name "PS7"
+        }
+        RotationalMotor {
+          name "motor7"
+        }
+      ]
+      endPoint Solid {
+        translation -0.0752549999742509 0 -0.058300006600904265
+        rotation 0 -1 0 6.433437211788593e-07
+        children [
+          Group {
+            children [
+              DEF f3-1-1 Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.03951 0.02493 0.03
+                }
+              }
+              Solid {
+                translation -0.03765 -0.009 0
+                rotation 0 0 1 0.7853981633974483
+                children [
+                  DEF f3-1-2 Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.06 0.03026 0.024
+                    }
+                  }
+                ]
+                name "3-1-2"
+                boundingObject USE f3-1-2
+                physics Physics {
+                }
+              }
+            ]
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position -7.913583717211736e-07
+              axis 0 0 1
+              anchor -0.05863 -0.03 0
+            }
+            device [
+              PositionSensor {
+                name "PS8"
+              }
+              RotationalMotor {
+                name "motor8"
+              }
+            ]
+            endPoint Solid {
+              translation -0.08363001978395145 -0.05499998021603322 0
+              rotation 0 0 1 0.7853972086416209
+              children [
+                DEF f3-2 Shape {
+                  appearance PBRAppearance {
+                  }
+                  geometry Box {
+                    size 0.086 0.02403 0.036
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    position -4.3570018881666783e-07
+                    axis 0 0 1
+                    anchor -0.03681 0 0
+                  }
+                  device [
+                    RotationalMotor {
+                      name "motor9"
+                    }
+                    PositionSensor {
+                      name "PS9"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation -0.04199999999999952 2.2612840070856654e-09 0
+                    rotation 0 0 -1 4.3597039098524516e-07
+                    children [
+                      DEF f3-3 Shape {
+                        appearance PBRAppearance {
+                        }
+                        geometry Box {
+                          size 0.03375 0.03096 0.024
+                        }
+                      }
+                      DEF TS3 TouchSensor {
+                        translation -0.04677502881259782 9.932452386035573e-06 1.5812774145640418e-09
+                        rotation -9.25406768295225e-08 -0.9999999999999915 -9.25414173298284e-08 1.570796326763133
+                        children [
+                          Pose {
+                            rotation 7.19235e-09 7.19235e-09 -1 -1.5707953071795862
+                            children [
+                              Shape {
+                                appearance PBRAppearance {
+                                }
+                                geometry Cone {
+                                  bottomRadius 0.02
+                                  height 0.05982
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                        name "TS3"
+                        boundingObject Pose {
+                          rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0943951023931953
+                          children [
+                            Box {
+                              size 0.02 0.0598 0.02
+                            }
+                          ]
+                        }
+                        physics Physics {
+                          density -1
+                          mass 0.1
+                        }
+                      }
+                    ]
+                    boundingObject USE f3-3
+                    physics Physics {
+                    }
+                  }
+                }
+              ]
+              name "solid(1)"
+              boundingObject USE f3-2
+              physics Physics {
+              }
+            }
+          }
+        ]
+        name "f3"
+        boundingObject USE f3-1-1
+        physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 6.438260483307102e-07
+        axis 0 1 0
+        anchor -0.065 0 0.05826
+      }
+      device [
+        PositionSensor {
+          name "PS10"
+        }
+        RotationalMotor {
+          name "motor10"
+        }
+      ]
+      endPoint Solid {
+        translation -0.07525499997424492 0 0.05830000660243603
+        rotation 0 1 0 6.440336342148305e-07
+        children [
+          Group {
+            children [
+              DEF f4-1-1 Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.03951 0.02493 0.03
+                }
+              }
+              Solid {
+                translation -0.03765 -0.009 0
+                rotation 0 0 1 0.7853981633974483
+                children [
+                  DEF f4-1-2 Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.06 0.03026 0.024
+                    }
+                  }
+                ]
+                name "4-1-1"
+                boundingObject USE f4-1-2
+                physics Physics {
+                }
+              }
+            ]
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position -7.913364745704143e-07
+              axis 0 0 1
+              anchor -0.05863 -0.03 0
+            }
+            device [
+              PositionSensor {
+                name "PS11"
+              }
+              RotationalMotor {
+                name "motor11"
+              }
+            ]
+            endPoint Solid {
+              translation -0.083630019783404 -0.054999980216580494 0
+              rotation 0 0 1 0.7853972086635467
+              children [
+                DEF f4-2 Shape {
+                  appearance PBRAppearance {
+                  }
+                  geometry Box {
+                    size 0.086 0.02403 0.036
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    position -4.3568563157236895e-07
+                    axis 0 0 1
+                    anchor -0.03681 0 0
+                  }
+                  device [
+                    RotationalMotor {
+                      name "motor12"
+                    }
+                    PositionSensor {
+                      name "PS12"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation -0.04199999999999952 2.261208386640753e-09 0
+                    rotation 0 0 -1 4.3597039098524516e-07
+                    children [
+                      DEF f4-3 Shape {
+                        appearance PBRAppearance {
+                        }
+                        geometry Box {
+                          size 0.03375 0.03096 0.024
+                        }
+                      }
+                      DEF TS4 TouchSensor {
+                        translation -0.046775028626765455 9.932259234124441e-06 -3.1512412124179434e-09
+                        rotation -9.253277197732087e-08 -0.9999999999999915 -9.253605256596789e-08 1.570796326854209
+                        children [
+                          Pose {
+                            rotation 7.19235e-09 7.19235e-09 -1 -1.5707953071795862
+                            children [
+                              Shape {
+                                appearance PBRAppearance {
+                                }
+                                geometry Cone {
+                                  bottomRadius 0.02
+                                  height 0.05982
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                        name "TS4"
+                        boundingObject Pose {
+                          rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0943951023931953
+                          children [
+                            Box {
+                              size 0.02 0.0598 0.02
+                            }
+                          ]
+                        }
+                        physics Physics {
+                          density -1
+                          mass 0.1
+                        }
+                      }
+                    ]
+                    boundingObject USE f4-3
+                    physics Physics {
+                    }
+                  }
+                }
+              ]
+              name "solid(1)"
+              boundingObject USE f4-2
+              physics Physics {
+              }
+            }
+          }
+        ]
+        name "f4"
+        boundingObject USE f4-1-1
+        physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position -6.43809899124069e-07
+        axis 0 1 0
+        anchor -0.06494 0 0
+      }
+      device [
+        PositionSensor {
+          name "PS13"
+        }
+        RotationalMotor {
+          name "motor13"
+        }
+      ]
+      endPoint Solid {
+        translation -0.0752549999999978 0 -6.635458915183691e-09
+        rotation 0 -1 0 6.440336342148305e-07
+        children [
+          Group {
+            children [
+              DEF f5-1-1 Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.03951 0.02493 0.03
+                }
+              }
+              Solid {
+                translation -0.03765 -0.009 0
+                rotation 0 0 1 0.7853981633974483
+                children [
+                  DEF f5-1-2 Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.06 0.03026 0.024
+                    }
+                  }
+                ]
+                name "5-1-2"
+                boundingObject USE f5-1-2
+                physics Physics {
+                }
+              }
+            ]
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position -7.913466300024652e-07
+              axis 0 0 1
+              anchor -0.05863 -0.03 0
+            }
+            device [
+              PositionSensor {
+                name "PS14"
+              }
+              RotationalMotor {
+                name "motor14"
+              }
+            ]
+            endPoint Solid {
+              translation -0.08363001978365785 -0.05499998021632545 0
+              rotation 0 0 1 0.7853972086533398
+              children [
+                DEF f5-2 Shape {
+                  appearance PBRAppearance {
+                  }
+                  geometry Box {
+                    size 0.086 0.02403 0.036
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    position -4.35692505185159e-07
+                    axis 0 0 1
+                    anchor -0.03681 0 0
+                  }
+                  device [
+                    RotationalMotor {
+                      name "motor15"
+                    }
+                    PositionSensor {
+                      name "PS15"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation -0.0419999999999995 2.261244309474652e-09 0
+                    rotation 0 0 -1 4.3597039098524516e-07
+                    children [
+                      DEF f5-3 Shape {
+                        appearance PBRAppearance {
+                        }
+                        geometry Box {
+                          size 0.03375 0.03096 0.024
+                        }
+                      }
+                      DEF TS5 TouchSensor {
+                        translation -0.046775028718970046 9.93235078011745e-06 1.5745824644142203e-09
+                        rotation -9.253721631951682e-08 -0.9999999999999915 -9.253809704167164e-08 1.5707963267633183
+                        children [
+                          Pose {
+                            rotation 7.19235e-09 7.19235e-09 -1 -1.5707953071795862
+                            children [
+                              Shape {
+                                appearance PBRAppearance {
+                                }
+                                geometry Cone {
+                                  bottomRadius 0.02
+                                  height 0.05982
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                        name "TS5"
+                        boundingObject Pose {
+                          rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0943951023931953
+                          children [
+                            Box {
+                              size 0.02 0.0598 0.02
+                            }
+                          ]
+                        }
+                        physics Physics {
+                          density -1
+                          mass 0.1
+                        }
+                      }
+                    ]
+                    boundingObject USE f5-3
+                    physics Physics {
+                    }
+                  }
+                }
+              ]
+              name "solid(1)"
+              boundingObject USE f5-2
+              physics Physics {
+              }
+            }
+          }
+        ]
+        name "f5"
+        boundingObject USE f5-1-1
+        physics Physics {
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 5.869411164253704e-07
+        axis 0 1 0
+        anchor 0.06494 0 0
+      }
+      device [
+        PositionSensor {
+          name "PS16"
+        }
+        RotationalMotor {
+          name "motor16"
+        }
+      ]
+      endPoint Solid {
+        translation 0.07525499999999788 0 -6.045093603222744e-09
+        rotation 0 1 0 5.870376707193935e-07
+        children [
+          Group {
+            children [
+              DEF f6-1-1 Shape {
+                appearance PBRAppearance {
+                }
+                geometry Box {
+                  size 0.03951 0.02493 0.03
+                }
+              }
+              Solid {
+                translation 0.03765 -0.009 0
+                rotation 0 0 -1 0.7853981633974483
+                children [
+                  DEF f6-1-2 Shape {
+                    appearance PBRAppearance {
+                    }
+                    geometry Box {
+                      size 0.06 0.03026 0.024
+                    }
+                  }
+                ]
+                name "6-1-1"
+                boundingObject USE f6-1-2
+                physics Physics {
+                }
+              }
+            ]
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              position 7.913466468246868e-07
+              axis 0 0 1
+              anchor 0.05863 -0.03 0
+            }
+            device [
+              PositionSensor {
+                name "PS17"
+              }
+              RotationalMotor {
+                name "motor17"
+              }
+            ]
+            endPoint Solid {
+              translation 0.08363001978365836 -0.054999980216326065 0
+              rotation 0 0 -1 0.7853972086533207
+              children [
+                DEF f6-2 Shape {
+                  appearance PBRAppearance {
+                  }
+                  geometry Box {
+                    size 0.086 0.02403 0.036
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    position 4.356925451382356e-07
+                    axis 0 0 1
+                    anchor 0.03681 0 0
+                  }
+                  device [
+                    PositionSensor {
+                      name "PS18"
+                    }
+                    RotationalMotor {
+                      name "motor18"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation 0.0419999999999995 2.2612442371232273e-09 0
+                    rotation 0 0 1 4.3597039098524516e-07
+                    children [
+                      DEF f6-3 Shape {
+                        appearance PBRAppearance {
+                        }
+                        geometry Box {
+                          size 0.03375 0.03096 0.024
+                        }
+                      }
+                      DEF TS6 TouchSensor {
+                        translation 0.04677502871896985 9.932350778091292e-06 3.5887501304010527e-09
+                        rotation -0.7071067811320222 -6.533067229591352e-08 -0.70710678124107 3.1415925228326342
+                        children [
+                          Pose {
+                            rotation 7.19235e-09 7.19235e-09 -1 -1.5707953071795862
+                            children [
+                              Shape {
+                                appearance PBRAppearance {
+                                }
+                                geometry Cone {
+                                  bottomRadius 0.02
+                                  height 0.05982
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                        name "TS6"
+                        boundingObject Pose {
+                          rotation 0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0943951023931953
+                          children [
+                            Box {
+                              size 0.02 0.0598 0.02
+                            }
+                          ]
+                        }
+                        physics Physics {
+                          density -1
+                          mass 0.1
+                        }
+                      }
+                    ]
+                    boundingObject USE f6-3
+                    physics Physics {
+                    }
+                  }
+                }
+              ]
+              name "solid(1)"
+              boundingObject USE f6-2
+              physics Physics {
+              }
+            }
+          }
+        ]
+        name "f6"
+        boundingObject USE f6-1-1
+        physics Physics {
+        }
+      }
+    }
+  ]
+  name "IRSL-XR06-01"
+  boundingObject USE body1
+  physics Physics {
+  }
+  controller "RL_PPO_VEL"
+  supervisor TRUE
+}
