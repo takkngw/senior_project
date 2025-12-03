@@ -16,4 +16,5 @@
 /controllers/sep_3/dqn_training_*
 /controllers/sep_3_bolzman/dqn_training_*\
 /controllers/sep_3_RNN/dqn_training_*
+.DS_Store
 
