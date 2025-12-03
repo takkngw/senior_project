@@ -1,6 +1,7 @@
 """
 DQN (sep_3_bolzman.py) を PPO (Proximal Policy Optimization) に書き換えたコントローラ
 RL_PPO.py に詳細なステップログ出力を追加したバージョン (RL_PPO_VEL.py)
+さらに学習済みモデルを読み込む機能を追加したバージョン (TL_PPO_VEL.py)
 """
 
 import numpy as np
@@ -37,7 +38,7 @@ class HexapodEnv:
         self.initial_motor_positions = [-45, 70, -110, 45, 70, -110, -45, -70, 110, 45, -70, 110, 0, -70, 110, 0, 70, -110]
         self.start_position = [0, 0.0, -0.07]
         self.start_rotation = [1, 0, 0, 1.57079632678966]
-        self.goal_y_position = 3
+        self.goal_y_position = 0.5 # 転移学習を行う場合は、ここを 1.0 や 2.0 に変更してください
     
         self.goal_count = 0
         self.current_velocity = np.zeros(3) # 速度を保持する変数を追加
@@ -473,6 +474,23 @@ def main():
     num_joints = env.num_joints
     
     agent = PPOAgent(env.state_size, num_joints, config)
+
+    # --- モデルのロード (Transfer Learning) ---
+    # 読み込みたいモデルのパスを指定してください
+    # 例: "ppo_training_20251201_120000/model_ep_500.pth"
+    model_path = "pretrained_model.pth" 
+    
+    if os.path.exists(model_path):
+        print(f"Loading model from {model_path}...")
+        try:
+            agent.network.load_state_dict(torch.load(model_path, map_location=agent.device))
+            print("Model loaded successfully!")
+        except Exception as e:
+            print(f"Error loading model: {e}")
+            print("Starting from scratch.")
+    else:
+        print(f"No model found at {model_path}, starting from scratch.")
+    # ---------------------------------------
     
     # --- ログ設定 ---
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
