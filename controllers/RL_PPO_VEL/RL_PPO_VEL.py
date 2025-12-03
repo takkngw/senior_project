@@ -37,7 +37,7 @@ class HexapodEnv:
         self.initial_motor_positions = [-45, 70, -110, 45, 70, -110, -45, -70, 110, 45, -70, 110, 0, -70, 110, 0, 70, -110]
         self.start_position = [0, 0.0, -0.07]
         self.start_rotation = [1, 0, 0, 1.57079632678966]
-        self.goal_y_position = 0.5
+        self.goal_y_position = 10
     
         self.goal_count = 0
         self.current_velocity = np.zeros(3) # 速度を保持する変数を追加
@@ -108,7 +108,8 @@ class HexapodEnv:
             *[mp / 180.0 for mp in motor_positions],
             relative_goal_pos_y / 5.0
         ]
-        return np.array(state, dtype=np.float32)
+        # NaNを0に置換し、値があまりに大きくならないようにクリップする安全策
+        return np.clip(np.nan_to_num(np.array(state, dtype=np.float32), nan=0.0), -10.0, 10.0)
     
     def execute_action(self, action_vector):
         """18次元の行動ベクトル（-1, 0, 1）をモーター指令に変換"""
@@ -136,8 +137,8 @@ class HexapodEnv:
         reward += np.clip(vel_y * 10.0, -1.0, 2.0)
         
         # 2. 安定性ペナルティ (横ズレ、高さブレ)
-        reward -= 0.1 * (abs(vel_x) + abs(vel_z))
-        reward -= 0.1 * abs(current_pos[0])
+        reward -= 0.05 * (abs(vel_x) + abs(vel_z))
+        reward -= 0.05 * abs(current_pos[0])
         
         # 3. 姿勢ペナルティ (傾きすぎたら減点)
         if abs(imu_values[0]) > 0.5 or abs(imu_values[1]) > 0.5:
@@ -148,7 +149,7 @@ class HexapodEnv:
 
         # 5. 高さ維持 (低すぎるとペナルティ)
         if current_pos[2] < 0.03: # ボディが地面につきそう
-            reward -= 0.1
+            reward -= 0.05
 
         # 6. ゴール到達 /転倒 (大きな報酬はそのまま)
         if current_pos[1] >= self.goal_y_position:
@@ -167,9 +168,9 @@ class HexapodEnv:
         max_count = 0
 
         if current_pos[1] >= self.goal_y_position:
-            self.goal_count += 1
-            if self.goal_count > 0 and self.goal_count % 50 == 0:
-                self.goal_y_position += 0.5
+            # self.goal_count += 1
+            # if self.goal_count > 0 and self.goal_count % 50 == 0:
+            #     self.goal_y_position = min(5.0, self.goal_y_position + 0.5)
             return True, "Goal reached!"
         if abs(imu_values[0]) > math.pi / 2.5 or abs(imu_values[1]) > math.pi / 2.5:
             return True, "Robot fell over!"
@@ -248,14 +249,21 @@ class ActorCritic(nn.Module):
         self.critic_head = nn.Linear(hidden_size, 1)
 
     def forward(self, x):
+        if torch.isnan(x).any():
+            print(f"[NaN Detected] Input x contains {torch.isnan(x).sum().item()} NaNs")
+
         base_out = self.shared_base(x)
         
         # Actor: 平均を計算し、tanhで[-1, 1]に収める
         mean = torch.tanh(self.actor_mean(base_out))
+        if torch.isnan(mean).any():
+            print(f"[NaN Detected] Actor mean contains {torch.isnan(mean).sum().item()} NaNs")
         
         # log_stdをバッチサイズに合わせる
         log_std = self.actor_log_std.expand_as(mean)
         std = torch.exp(log_std)
+        if torch.isnan(std).any():
+            print(f"[NaN Detected] Actor std contains {torch.isnan(std).sum().item()} NaNs")
         
         # Critic: 状態価値を計算
         value = self.critic_head(base_out)
@@ -427,6 +435,9 @@ class PPOAgent:
                 # 合計損失
                 loss = pg_loss - self.ent_coef * entropy + self.vf_coef * v_loss
                 
+                if torch.isnan(loss).any():
+                    print(f"[NaN Detected] Loss contains {torch.isnan(loss).sum().item()} NaNs")
+                
                 self.optimizer.zero_grad()
                 loss.backward()
                 nn.utils.clip_grad_norm_(self.network.parameters(), 0.5)
@@ -445,11 +456,11 @@ def main():
     
     # --- PPO用コンフィグ ---
     config = {
-        'learning_rate': 3e-4,
+        'learning_rate': 1e-4,
         'gamma': 0.99,
         'gae_lambda': 0.95,
         'clip_coef': 0.2,
-        'ent_coef': 0.01, # 連続行動空間ではエントロピーボーナスを小さめに設定することが多い -> 探索不足解消のため 0.001 -> 0.01
+        'ent_coef': 0.02, # 連続行動空間ではエントロピーボーナスを小さめに設定することが多い -> 探索不足解消のため 0.001 -> 0.01 -> 0.02
         'vf_coef': 0.5,
         'n_steps': 4096,  # このステップ数収集したら学習
         'n_epochs': 10,   # 収集したデータで何回学習するか
@@ -457,7 +468,7 @@ def main():
     }
     # ----------------------
 
-    total_episodes = 10000
+    total_episodes = 1000
 
     num_joints = env.num_joints
     
