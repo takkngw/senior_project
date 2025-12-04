@@ -37,7 +37,7 @@ class HexapodEnv:
         self.initial_motor_positions = [-45, 70, -110, 45, 70, -110, -45, -70, 110, 45, -70, 110, 0, -70, 110, 0, 70, -110]
         self.start_position = [0, 0.0, -0.07]
         self.start_rotation = [1, 0, 0, 1.57079632678966]
-        self.goal_y_position = 3
+        self.goal_y_position = 0.5
     
         self.goal_count = 0
         self.current_velocity = np.zeros(3) # 速度を保持する変数を追加
@@ -132,31 +132,32 @@ class HexapodEnv:
 
         reward = 0.0
         
-        # 1. 前進報酬 (係数を 20 -> 2.0 程度に下げる -> 10.0に上げる)
+        # 1. 前進報酬 (係数を 10.0 -> 50.0 に大幅アップ)
         # 目標: ステップごとに +0.01 ~ +0.1 程度稼ぐイメージ -> もっと強く動機づける
-        reward += np.clip(vel_y * 10.0, -1.0, 2.0)
+        # 振動対策のため、マイナス側も同じだけペナルティを与える (-1.0 -> -5.0)
+        reward += np.clip(vel_y * 50.0, -5.0, 5.0)
         
-        # 2. 安定性ペナルティ (横ズレ、高さブレ)
-        reward -= 0.05 * (abs(vel_x) + abs(vel_z))
-        reward -= 0.05 * abs(current_pos[0])
+        # 2. 安定性ペナルティ (一時的に無効化)
+        reward -= 0.0 * (abs(vel_x) + abs(vel_z))
+        reward -= 0.0 * abs(current_pos[0])
         
         # 3. 姿勢ペナルティ (傾きすぎたら減点)
         if abs(imu_values[0]) > 0.5 or abs(imu_values[1]) > 0.5:
              reward -= 0.1
 
-        # 4. 生存ボーナス (転ばなければ少しプラス)
-        reward += 0.01
+        # 4. 時間ペナルティ (削除)
+        reward += 0.0
 
-        # 5. 高さ維持 (低すぎるとペナルティ)
+        # 5. 高さ維持 (一時的に無効化)
         if current_pos[2] < 0.03: # ボディが地面につきそう
-            reward -= 0.05
+            reward -= 0.0
 
         # 6. ゴール到達 /転倒 (大きな報酬はそのまま)
         if current_pos[1] >= self.goal_y_position:
             reward += 10.0 # 50だと大きすぎて勾配が跳ねることがあるので10程度推奨
             
         if abs(imu_values[0]) > math.pi / 2.5 or abs(imu_values[1]) > math.pi / 2.5:
-            reward -= 10.0 # -1000は大きすぎる。エピソード即終了なら -10 程度で十分
+            reward -= 1.0 # -10.0 -> -1.0 転倒ペナルティを軽減してトライを促す
 
         return reward
     
@@ -460,7 +461,7 @@ def main():
         'gamma': 0.99,
         'gae_lambda': 0.95,
         'clip_coef': 0.2,
-        'ent_coef': 0.02, # 連続行動空間ではエントロピーボーナスを小さめに設定することが多い -> 探索不足解消のため 0.001 -> 0.01 -> 0.02
+        'ent_coef': 0.01, # 連続行動空間ではエントロピーボーナスを小さめに設定することが多い -> 協調動作を促すため 0.05 -> 0.01
         'vf_coef': 0.5,
         'n_steps': 4096,  # このステップ数収集したら学習
         'n_epochs': 10,   # 収集したデータで何回学習するか

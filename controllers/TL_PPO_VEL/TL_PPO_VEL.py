@@ -146,7 +146,7 @@ class HexapodEnv:
              reward -= 0.1
 
         # 4. 生存ボーナス (転ばなければ少しプラス)
-        reward += 0.01
+        reward -= 0.1
 
         # 5. 高さ維持 (低すぎるとペナルティ)
         if current_pos[2] < 0.03: # ボディが地面につきそう
