@@ -138,15 +138,15 @@ class HexapodEnv:
         reward += np.clip(vel_y * 50.0, -5.0, 5.0)
         
         # 2. 安定性ペナルティ (一時的に無効化)
-        reward -= 0.0 * (abs(vel_x) + abs(vel_z))
-        reward -= 0.0 * abs(current_pos[0])
+        reward -= 0.3 * (abs(vel_x) + abs(vel_z))
+        reward -= 0.3 * abs(current_pos[0])
         
         # 3. 姿勢ペナルティ (傾きすぎたら減点)
         if abs(imu_values[0]) > 0.5 or abs(imu_values[1]) > 0.5:
              reward -= 0.1
 
         # 4. 時間ペナルティ (削除)
-        reward += 0.0
+        reward - 0.1
 
         # 5. 高さ維持 (一時的に無効化)
         if current_pos[2] < 0.03: # ボディが地面につきそう
